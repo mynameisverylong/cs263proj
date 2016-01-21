@@ -40,29 +40,34 @@ public class DatastoreServlet extends HttpServlet {
                 for (Entity result : pq.asIterable()){
                     Key k=result.getKey();
                     String nkeyname=k.getName();
-                    //String nvalue = (String) result.getProperty("value");
+                    String nvalue = (String) result.getProperty("value");
+                    String out = String.format("<h2>name: %s, value: %s</h2>",nkeyname,nvalue);
+                    //resp.getWriter().println(out);
                     if (syncCache.contains(nkeyname)){
-                        String nvalue = (String) syncCache.get(nkeyname);
-                        String out = String.format("<h2>name: %s, value: %s</h2>",nkeyname,nvalue);
-                        resp.getWriter().println(out);
+                        out+="(Memcache)";
                     }
+                    resp.getWriter().println(out);
                 }
             }
             else if (keyname!=null && value==null){
                 try{
                     Key k=KeyFactory.createKey("TaskData",keyname);
-                    Entity en=datastore.get(k);
-                    String nvalue = (String) en.getProperty("value");
+                    //Entity en=datastore.get(k);
+                    //String nvalue = (String) en.getProperty("value");
                     //String out = String.format("<h2>name: %s, value: %s</h2>",keyname,nvalue);
-                    if (keyname.contains(keyname)){
+                    if (syncCache.contains(keyname)){
+                        Entity en=(Entity)syncCache.get(keyname);
+                        String nvalue = (String) en.getProperty("value");
                         String out = String.format("<h2>name: %s, value: %s(Both)</h2>",keyname,nvalue);
                         resp.getWriter().println(out);
                     }
                     else {
+                        Entity en=datastore.get(k);
+                        String nvalue = (String) en.getProperty("value");
                         String out = String.format("<h2>name: %s, value: %s(Datastore)</h2>",keyname,nvalue);
                         resp.getWriter().println(out);
                         //String nvalue = (String) en.getProperty("value");
-                        syncCache.put(keyname,nvalue);
+                        syncCache.put(keyname,en);
                     }
                     //String nvalue = (String) en.getProperty("value");
                     //String out = String.format("<h2>name: %s, value: %s</h2>",keyname,nvalue);
@@ -79,7 +84,7 @@ public class DatastoreServlet extends HttpServlet {
                 tne.setProperty("date",date);
                 datastore.put(tne);
                 
-                syncCache.put(keyname,value);
+                syncCache.put(keyname,tne);
 
                 String out = String.format("<h2>Store %s and %s in Memcache</h2>",keyname,value);
                 resp.getWriter().println(out);
