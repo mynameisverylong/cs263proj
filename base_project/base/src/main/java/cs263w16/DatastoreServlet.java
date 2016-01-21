@@ -17,7 +17,8 @@ public class DatastoreServlet extends HttpServlet {
         resp.getWriter().println("<h2>Hello World</h2>"); //remove this line
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        
+        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+
         String keyname=req.getParameter("keyname");
         String value=req.getParameter("value");
 
@@ -39,10 +40,12 @@ public class DatastoreServlet extends HttpServlet {
                 for (Entity result : pq.asIterable()){
                     Key k=result.getKey();
                     String nkeyname=k.getName();
-                    //String nkeyname=(String) result.getProperty("keyname");
-                    String nvalue = (String) result.getProperty("value");
-                    String out = String.format("<h2>name: %s, value: %s</h2>",nkeyname,nvalue);
-                    resp.getWriter().println(out);
+                    //String nvalue = (String) result.getProperty("value");
+                    if (syncCache.contains(nkeyname)){
+                        String nvalue = (String) syncCache.get(nkeyname);
+                        String out = String.format("<h2>name: %s, value: %s</h2>",nkeyname,nvalue);
+                        resp.getWriter().println(out);
+                    }
                 }
             }
             else if (keyname!=null && value==null){
@@ -50,12 +53,23 @@ public class DatastoreServlet extends HttpServlet {
                     Key k=KeyFactory.createKey("TaskData",keyname);
                     Entity en=datastore.get(k);
                     String nvalue = (String) en.getProperty("value");
-                    String out = String.format("<h2>name: %s, value: %s</h2>",keyname,nvalue);
-                    resp.getWriter().println(out);
+                    //String out = String.format("<h2>name: %s, value: %s</h2>",keyname,nvalue);
+                    if (keyname.contains(keyname)){
+                        String out = String.format("<h2>name: %s, value: %s(Both)</h2>",keyname,nvalue);
+                        resp.getWriter().println(out);
+                    }
+                    else {
+                        String out = String.format("<h2>name: %s, value: %s(Datastore)</h2>",keyname,nvalue);
+                        resp.getWriter().println(out);
+                        //String nvalue = (String) en.getProperty("value");
+                        syncCache.put(keyname,nvalue);
+                    }
+                    //String nvalue = (String) en.getProperty("value");
+                    //String out = String.format("<h2>name: %s, value: %s</h2>",keyname,nvalue);
+                    //resp.getWriter().println(out);
                 } catch (EntityNotFoundException err){
-                    resp.getWriter().println("<h2>error: EntityNotFound</h2>");
+                    resp.getWriter().println("<h2>Neither</h2>");
                 }
-
                 //resp.getWriter().println("<h2>name: %s, value: %s</h2>",keyname,value);
             }
             else if (keyname!=null && value!=null){
@@ -64,7 +78,10 @@ public class DatastoreServlet extends HttpServlet {
                 Date date = new Date();
                 tne.setProperty("date",date);
                 datastore.put(tne);
-                String out = String.format("<h2>Store %s and %s in Datastore</h2>",keyname,value);
+                
+                syncCache.put(keyname,value);
+
+                String out = String.format("<h2>Store %s and %s in Memcache</h2>",keyname,value);
                 resp.getWriter().println(out);
                 //resp.getWriter().println("<h2>Store %s and %s in Datastore</h2>",keyname,value);
             }
