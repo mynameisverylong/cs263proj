@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.logging.*;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.memcache.*;
+import com.google.appengine.api.channel.*;
 
 public class Worker extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -30,5 +31,14 @@ public class Worker extends HttpServlet {
         syncCache.put("col",col);
         syncCache.put("heap",heap);
         syncCache.put("result",result);
+        if (syncCache.contains("userList")){
+            ChannelService channelService = ChannelServiceFactory.getChannelService();
+
+            List ul = (List)syncCache.get("userList");
+            for(Iterator i = ul.iterator();i.hasNext(); ){
+                String username = (String) i.next();
+                channelService.sendMessage(new ChannelMessage(username, heap));
+            }
+        }
     }
 }

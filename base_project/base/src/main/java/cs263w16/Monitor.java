@@ -39,6 +39,13 @@ public class Monitor extends HttpServlet {
         String en3=(String)syncCache.get("result");
         String out3 = String.format("<h2>result: </br>%s</h2>",en3);
         resp.getWriter().println(out3);
+        
+        if (syncCache.contains("userList")){
+            List en6=(List)syncCache.get("userList");
+            String out6 = String.format("<h2>userList: </br>%s</h2>",en6.toString());
+            resp.getWriter().println(out6);
+        }
+        
         try{
             Key k=KeyFactory.createKey("TaskData","program");
             Entity en4=datastore.get(k);
