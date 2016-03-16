@@ -96,6 +96,15 @@ public class Watch {
     catch (Exception err){
         //resp.getWriter().println("<h2>error</h2>");
     }
+    try{
+        Key k=KeyFactory.createKey("TaskData","ip");
+        Entity en4=datastore.get(k);
+        String nvalue = (String) en4.getProperty("path");
+        index = index.replaceAll("\\{\\{ mypath \\}\\}", nvalue);
+    }
+    catch (Exception err){
+        //resp.getWriter().println("<h2>error</h2>");
+    }
     String initheap=(String) syncCache.get("heap");
     index = index.replaceAll("\\{\\{ heap \\}\\}", initheap);
 //<<<<<<< Updated upstream
