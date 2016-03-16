@@ -79,20 +79,6 @@
                 
             </div>
         </div>
-        <script>
-            fakeMessage = function() {
-                fm = '{"scope":[{"sym":"a", "val":"1"},{"sym":"b", "val":"2"},{"sym":"c", "val":"3"}],"row":"100", "col":"300"}'
-                d_json = JSON.parse(fm)
-                $("tbody#scope-all").empty();
-                d_json.scope.forEach(
-                    function(entry) {
-                        $("tbody#scope-all").append("<tr><td>"+entry.sym+"</td><td>"+entry.val+"</td>");
-                    }
-                );
-                $("a#row").empty().append("Row:"+d_json.row);
-                $("a#col").empty().append("Col:"+d_json.col);
-            }
-        </script>
         <script type="text/javascript" src="/_ah/channel/jsapi"></script>
         <script>
             sendMessage = function(path) {
@@ -102,20 +88,18 @@
             };
 
             onOpened = function() {
-                connected = true;
-                sendMessage('opened');
-                updateBoard();
             };
 
             onMessage = function(message) {
+                console.log(message.data);
                 d_json = JSON.parse(message.data);
                 $("tbody#scope-all").empty();
                 d_json.scope.forEach(
                     function(entry) {
-                        $("tbody#scope-all").append("<tr><td>"+entry.sym+"</td><td>"+entry.val+"</td>");
+                        $("tbody#scope-all").append("<tr><td>"+entry.sym+"</td><td>"+entry.value+"</td>");
                     }
                 );
-                $("a#row").empty().append("Row:"+d_json.row);
+                $("a#row").empty().append("Row:"+d_json.line);
                 $("a#col").empty().append("Col:"+d_json.col);
             };
 
