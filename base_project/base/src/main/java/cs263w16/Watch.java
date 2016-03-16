@@ -86,6 +86,7 @@ public class Watch {
     String token = channelService.createChannel(userId);
     index = index.replaceAll("\\{\\{ token \\}\\}", token);
     MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+<<<<<<< Updated upstream
     if (syncCache.contains("userList")){
       List usrlist = (List)syncCache.get("userList");
       usrlist.add(userId);
@@ -96,6 +97,10 @@ public class Watch {
       usrlist.add(userId);
       syncCache.put("userList",usrlist);
     }
+=======
+    
+    
+>>>>>>> Stashed changes
     return index;
   }
 
