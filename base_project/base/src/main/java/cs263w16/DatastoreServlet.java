@@ -21,13 +21,14 @@ public class DatastoreServlet extends HttpServlet {
 
         //String keyname=req.getParameter("keyname");
         //String value=req.getParameter("value");
-
+        List emptyList = new ArrayList();
+        syncCache.put("userList",emptyList);
         String prog = req.getParameter("program");
-        
         String port = req.getParameter("port");
         String ip = req.getRemoteAddr();
+        String path = "http://" + ip +":" + port + "/next";
         Entity ipt = new Entity("TaskData","ip");
-        ipt.setProperty("ipadd",ip);
+        ipt.setProperty("path",path);
         datastore.put(ipt);
 
         Entity tne=new Entity("TaskData","program");
