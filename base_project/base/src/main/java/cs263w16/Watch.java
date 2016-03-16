@@ -88,12 +88,12 @@ public class Watch {
     MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
     if (syncCache.contains("userList")){
       List usrlist = (List)syncCache.get("userList");
-      usrlist.append(userId);
+      usrlist.add(userId);
       syncCache.put("userList",usrlist);
     }
     else {
       List usrlist = new ArrayList();
-      usrlist.append(userId);
+      usrlist.add(userId);
       syncCache.put("userList",usrlist);
     }
     return index;
