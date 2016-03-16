@@ -86,14 +86,15 @@ public class Watch {
     String token = channelService.createChannel(userId);
     index = index.replaceAll("\\{\\{ token \\}\\}", token);
     MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     try{
         Key k=KeyFactory.createKey("TaskData","program");
         Entity en4=datastore.get(k);
         String nvalue = (String) en4.getProperty("code");
         index = index.replaceAll("\\{\\{ code \\}\\}", nvalue);
     }
-    catch (EntityNotFoundException err){
-        resp.getWriter().println("<h2>error</h2>");
+    catch (Exception err){
+        //resp.getWriter().println("<h2>error</h2>");
     }
 
 //<<<<<<< Updated upstream

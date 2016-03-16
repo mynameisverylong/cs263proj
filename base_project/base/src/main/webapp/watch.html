@@ -95,24 +95,6 @@
         </script>
         <script type="text/javascript" src="/_ah/channel/jsapi"></script>
         <script>
-            channel = new goog.appengine.Channel('{{ token }}');
-            socket = channel.open();
-            socket.onopen = onOpened;
-            socket.onmessage = onMessage;
-            socket.onerror = onError;
-            socket.onclose = onClose;
-            
-            sendMessage = function(path) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', path, true);
-                xhr.send();
-            };
-
-            onOpened = function() {
-                connected = true;
-                sendMessage('opened');
-                updateBoard();
-            };
             
             onMessage = function(message) {
                 d_json = JSON.parse(message.data);
@@ -125,6 +107,11 @@
                 $("a#row").empty().append("Row:"+d_json.row);
                 $("a#col").empty().append("Col:"+d_json.col);
             };
+            channel = new goog.appengine.Channel('{{ token }}');
+            socket = channel.open();
+            socket.onmessage = onMessage;
+            
+
         </script>
 
     </body>
