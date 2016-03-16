@@ -35,7 +35,7 @@ public class DatastoreResource {
     PreparedQuery pq = datastore.prepare(q);
     for (Entity e : pq.asIterable()) {
         String keyname = e.getKey().getName();
-        String value = (String) e.getProperty("value");
+        String value = (String) e.getProperty("code");
         Date date = (Date) e.getProperty("date");
         TaskData t = new TaskData(keyname, value, date);
         list.add(t);
@@ -59,7 +59,7 @@ public class DatastoreResource {
     PreparedQuery pq = datastore.prepare(q);
     for (Entity e : pq.asIterable()) {
         String keyname = e.getKey().getName();
-        String value = (String) e.getProperty("value");
+        String value = (String) e.getProperty("code");
         Date date = (Date) e.getProperty("date");
         TaskData t = new TaskData(keyname, value, date);
         list.add(t);

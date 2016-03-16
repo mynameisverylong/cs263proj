@@ -35,6 +35,7 @@ public class Hello {
   // This method is called if HTML is request
   @GET
   @Produces(MediaType.TEXT_HTML)
+  //public String sayHtmlHello(@Context HttpServletResponse response) {
   public String sayHtmlHello() {
     return "<html> " + "<title>" + "Hello Jersey" + "</title>"
         + "<body><h1>" + "Hello Jersey" + "</body></h1>" + "</html> ";

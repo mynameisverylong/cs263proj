@@ -23,7 +23,7 @@ public class TaskDataResource {
   // for the browser
   @GET
   @Produces(MediaType.TEXT_XML)
-  public TaskData getTaskDataHTML() {
+  public String getTaskDataHTML() {
     //add your code here (get Entity from datastore using this.keyname)
     // throw new RuntimeException("Get: TaskData with " + keyname +  " not found");
     //if not found
@@ -32,19 +32,19 @@ public class TaskDataResource {
 
     if (syncCache.contains(this.keyname)){
       Entity tne=(Entity)syncCache.get(this.keyname);
-      String value=(String)tne.getProperty("value");
+      String value=(String)tne.getProperty("code");
       Date date = (Date)tne.getProperty("date");
       TaskData td = new TaskData(this.keyname,value,date);
-      return td;
+      return value;
     }
     Key k=KeyFactory.createKey("TaskData",this.keyname);
     try {
       Entity tne = datastore.get(k);
       syncCache.put(this.keyname,tne);
-      String value = (String)tne.getProperty("value");
+      String value = (String)tne.getProperty("code");
       Date date = (Date)tne.getProperty("date");
       TaskData td = new TaskData(this.keyname,value,date);
-      return td;
+      return value;
     } catch(EntityNotFoundException err){
       throw new RuntimeException("Get: TaskData with "+this.keyname+" not found!");
     }
@@ -52,26 +52,26 @@ public class TaskDataResource {
   // for the application
   @GET
   @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-  public TaskData getTaskData() {
+  public String getTaskData() {
     //same code as above method
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 
     if (syncCache.contains(this.keyname)){
       Entity tne=(Entity)syncCache.get(this.keyname);
-      String value=(String)tne.getProperty("value");
+      String value=(String)tne.getProperty("code");
       Date date = (Date)tne.getProperty("date");
       TaskData td = new TaskData(this.keyname,value,date);
-      return td;
+      return value;
     }
     Key k=KeyFactory.createKey("TaskData",this.keyname);
     try {
       Entity tne = (Entity)datastore.get(k);
       syncCache.put(this.keyname,tne);
-      String value = (String)tne.getProperty("value");
+      String value = (String)tne.getProperty("code");
       Date date = (Date)tne.getProperty("date");
       TaskData td = new TaskData(this.keyname,value,date);
-      return td;
+      return value;
     } catch(EntityNotFoundException err){
       throw new RuntimeException("Get: TaskData with "+this.keyname+" not found!");
     }

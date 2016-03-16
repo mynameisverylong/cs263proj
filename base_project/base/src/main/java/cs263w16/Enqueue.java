@@ -14,14 +14,17 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class Enqueue extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String key = request.getParameter("keyname");
-        String value = request.getParameter("value");
+        String line = request.getParameter("line");
+        String col = request.getParameter("col");
+        String heap = request.getParameter("heap");
+        String result = request.getParameter("result");
+        if (result==null)
+        	result="noresult";
         // Add the task to the default queue.
         Queue queue = QueueFactory.getDefaultQueue();
-        queue.add(TaskOptions.Builder.withUrl("/worker").param("keyname", key).param("value",value));
-
+        queue.add(TaskOptions.Builder.withUrl("/worker").param("line", line).param("col",col).param("heap",heap).param("result",result));
         response.sendRedirect("/done.html");
     }
 }

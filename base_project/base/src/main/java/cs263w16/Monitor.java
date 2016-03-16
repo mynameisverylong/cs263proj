@@ -9,12 +9,12 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.memcache.*;
 
 @SuppressWarnings("serial")
-public class DatastoreServlet extends HttpServlet {
+public class Monitor extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        /*resp.setContentType("text/html");
+        resp.setContentType("text/html");
         resp.getWriter().println("<html><body>");
-        resp.getWriter().println("<h2>Hello World</h2>"); //remove this line*/
+        resp.getWriter().println("<h2>Hello World</h2>"); //remove this line
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
@@ -22,6 +22,34 @@ public class DatastoreServlet extends HttpServlet {
         //String keyname=req.getParameter("keyname");
         //String value=req.getParameter("value");
         String prog = req.getParameter("program");
+
+
+        String en=(String)syncCache.get("line");
+        String out = String.format("<h2>line: %s</h2>",en);
+        resp.getWriter().println(out);
+
+        String en1=(String)syncCache.get("col");
+        String out1 = String.format("<h2>col: %s</h2>",en1);
+        resp.getWriter().println(out1);
+
+        String en2=(String)syncCache.get("heap");
+        String out2 = String.format("<h2>heap: %s</h2>",en2);
+        resp.getWriter().println(out2);
+
+        String en3=(String)syncCache.get("result");
+        String out3 = String.format("<h2>result: %s</h2>",en3);
+        resp.getWriter().println(out3);
+        try{
+            Key k=KeyFactory.createKey("TaskData","program");
+            Entity en4=datastore.get(k);
+            String nvalue = (String) en4.getProperty("code");
+            String out4 = String.format("<h2>%s</h2>",nvalue);
+            resp.getWriter().println(out4);
+        }
+        catch (EntityNotFoundException err){
+            resp.getWriter().println("<h2>error</h2>");
+        }
+        //String nvalue = (String) en.getProperty("value");
 
         //Enumeration<String> e=req.getParameterNames();
         //Boolean flag=true;
@@ -34,11 +62,11 @@ public class DatastoreServlet extends HttpServlet {
                 break;
             }
         }*/
-        Entity tne=new Entity("TaskData","program");
+        /*Entity tne=new Entity("TaskData","program");
         tne.setProperty("code",prog);
         Date date = new Date();
         tne.setProperty("date",date);
-        datastore.put(tne);
+        datastore.put(tne);*/
         /*if (flag){
             if (keyname==null && value==null){
                 Query q = new Query("TaskData");
@@ -100,8 +128,8 @@ public class DatastoreServlet extends HttpServlet {
                 resp.getWriter().println("<h2>error:unknown parameter</h2>");
             }
         }
-        //Add your code here
+        //Add your code here*/
 
-        //resp.getWriter().println("</body></html>");*/
+        resp.getWriter().println("</body></html>");
     }
 }

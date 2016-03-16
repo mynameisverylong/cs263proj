@@ -13,20 +13,22 @@ import com.google.appengine.api.memcache.*;
 public class Worker extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyname = request.getParameter("keyname");
-        String value = request.getParameter("value");
-
+        String line = request.getParameter("line");
+        String col = request.getParameter("col");
+        String heap = request.getParameter("heap");
+        String result = request.getParameter("result");
         // Do something with key.
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 
-        Entity tne=new Entity("TaskData",keyname);
+        /*Entity tne=new Entity("TaskData",keyname);
         tne.setProperty("value",value);
         Date date = new Date();
         tne.setProperty("date",date);
-        datastore.put(tne);
+        datastore.put(tne);*/
 
-        syncCache.put(keyname,value);
+        syncCache.put("line",line);
+        syncCache.put("col",col);
+        syncCache.put("heap",heap);
+        syncCache.put("result",result);
     }
 }
