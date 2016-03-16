@@ -37,7 +37,7 @@ public class Monitor extends HttpServlet {
         resp.getWriter().println(out2);
 
         String en3=(String)syncCache.get("result");
-        String out3 = String.format("<h2>result: %s</h2>",en3);
+        String out3 = String.format("<h2>result: </br>%s</h2>",en3);
         resp.getWriter().println(out3);
         try{
             Key k=KeyFactory.createKey("TaskData","program");

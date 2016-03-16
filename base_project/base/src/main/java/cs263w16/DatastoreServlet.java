@@ -11,7 +11,7 @@ import com.google.appengine.api.memcache.*;
 @SuppressWarnings("serial")
 public class DatastoreServlet extends HttpServlet {
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         /*resp.setContentType("text/html");
         resp.getWriter().println("<html><body>");
         resp.getWriter().println("<h2>Hello World</h2>"); //remove this line*/

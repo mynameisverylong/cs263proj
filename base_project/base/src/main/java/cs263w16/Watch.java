@@ -86,7 +86,16 @@ public class Watch {
     String token = channelService.createChannel(userId);
     index = index.replaceAll("\\{\\{ token \\}\\}", token);
     MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-    
+    if (syncCache.contains("userList")){
+      List usrlist = (List)syncCache.get("userList");
+      usrlist.append(userId);
+      syncCache.put("userList",usrlist);
+    }
+    else {
+      List usrlist = new ArrayList();
+      usrlist.append(userId);
+      syncCache.put("userList",usrlist);
+    }
     return index;
   }
 
