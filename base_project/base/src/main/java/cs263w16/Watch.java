@@ -96,7 +96,8 @@ public class Watch {
     catch (Exception err){
         //resp.getWriter().println("<h2>error</h2>");
     }
-
+    String initheap=(String) syncCache.get("heap");
+    index = index.replaceAll("\\{\\{ heap \\}\\}", initheap);
 //<<<<<<< Updated upstream
     if (syncCache.contains("userList")){
       List usrlist = (List)syncCache.get("userList");

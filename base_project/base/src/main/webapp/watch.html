@@ -32,14 +32,6 @@
                         </tr>
                     </thead>
                     <tbody id="scope-all">
-                        <tr>
-                            <td>a</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>b</td>
-                            <td>2</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -95,7 +87,6 @@
             };
 
             onMessage = function(message) {
-                console.log(message.data);
                 d_json = JSON.parse(message.data);
                 $("tbody#scope-all").empty();
                 d_json.scope.forEach(
@@ -114,6 +105,20 @@
             socket.onopen = onOpened;
             socket.onmessage = onMessage;
             
+            onLoad = function() {
+                d_json = JSON.parse('{{ heap }}');
+                $("tbody#scope-all").empty();
+                d_json.scope.forEach(
+                    function(entry) {
+                        $("tbody#scope-all").append("<tr><td>"+entry.sym+"</td><td>"+entry.value+"</td>");
+                    }
+                );
+                $("a#row").empty().append("Row:"+d_json.line);
+                $("a#col").empty().append("Col:"+d_json.col);
+                $("p#result").empty().append(d_json.result);
+            }
+
+            $(document).ready(onLoad);
         </script>
 
     </body>
